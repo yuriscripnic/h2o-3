@@ -4,6 +4,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import hex.ModelCategory;
 import hex.genmodel.GenModel;
 import hex.genmodel.MojoModel;
+import hex.genmodel.algos.glrm.GlrmMojoModel;
 import hex.genmodel.easy.EasyPredictModelWrapper;
 import hex.genmodel.easy.RowData;
 import hex.genmodel.easy.prediction.*;
@@ -91,8 +92,6 @@ public class PredictCsv {
         int numNums = this.model.m.nfeatures()-numCats;
         String[][] domainValues = this.model.m.getDomainValues();
         int lastCatIdx = numCats-1;
-        //int additionalCatCols = this.model.getUnknownCategoricalLevelsSeenPerColumn().size();
-       // ConcurrentHashMap<String, AtomicLong> temp = this.model.getUnknownCategoricalLevelsSeenPerColumn();
 
         for (int index = 0; index <= lastCatIdx  ; index++) { // add names for categorical columns
           String[] tdomains = domainValues[index]; //this.model.m.getDomainValues(index)
@@ -137,6 +136,18 @@ public class PredictCsv {
 
       case Regression:
         output.write("predict");
+        break;
+
+      case DimReduction:
+        int numArch = ((GlrmMojoModel) ((EasyPredictModelWrapper)((PredictCsv)this).model).m)._archetypes.length;
+        if (numArch > 0) {
+          output.write("Coeff_Arch0");
+
+          for (int i = 1; i < numArch; i++) {
+            output.write(',');
+            output.write("Coeff_Arch"+i);
+          }
+        }
         break;
 
       default:
@@ -214,6 +225,17 @@ public class PredictCsv {
             break;
           }
 
+          case DimReduction: {
+            DimReductionModelPrediction p = model.predictDimReduction(row);
+            if (p.dimensions.length > 0) {
+              output.write(myDoubleToString(p.dimensions[0]));
+              for (int i = 1; i < p.dimensions.length; i++) {
+                output.write(",");
+                output.write(myDoubleToString(p.dimensions[i]));
+              }
+            }
+            break;
+          }
           default:
             throw new Exception("Unknown model category " + category);
         }
