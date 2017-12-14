@@ -24,6 +24,16 @@ public final class GbmMojoModel extends SharedTreeMojoModel {
     @Override
     public final double[] score0(double[] row, double offset, double[] preds) {
         super.scoreAllTrees(row, preds);
+        return unifyPreds(row, offset, preds);
+    }
+
+    @Override
+    public double[] score0(double[] row, double[] preds) {
+        return score0(row, 0.0, preds);
+    }
+
+    @Override
+    public final double[] unifyPreds(double[] row, double offset, double[] preds) {
         if (_family == bernoulli || _family == quasibinomial || _family == modified_huber) {
             double f = preds[1] + _init_f + offset;
             preds[2] = _family.linkInv(f);
@@ -43,11 +53,6 @@ public final class GbmMojoModel extends SharedTreeMojoModel {
             GenModel.correctProbabilities(preds, _priorClassDistrib, _modelClassDistrib);
         preds[0] = GenModel.getPrediction(preds, _priorClassDistrib, row, _defaultThreshold);
         return preds;
-    }
-
-    @Override
-    public double[] score0(double[] row, double[] preds) {
-        return score0(row, 0.0, preds);
     }
 
 }

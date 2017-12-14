@@ -21,7 +21,16 @@ public final class DrfMojoModel extends SharedTreeMojoModel {
     @Override
     public final double[] score0(double[] row, double offset, double[] preds) {
         super.scoreAllTrees(row, preds);
+        return unifyPreds(row, offset, preds);
+    }
 
+    @Override
+    public double[] score0(double[] row, double[] preds) {
+        return score0(row, 0.0, preds);
+    }
+
+    @Override
+    public final double[] unifyPreds(double[] row, double offset, double[] preds) {
         // Correct the predictions -- see `DRFModel.toJavaUnifyPreds`
         if (_nclasses == 1) {
             // Regression
@@ -44,11 +53,6 @@ public final class DrfMojoModel extends SharedTreeMojoModel {
             preds[0] = GenModel.getPrediction(preds, _priorClassDistrib, row, _defaultThreshold);
         }
         return preds;
-    }
-
-    @Override
-    public double[] score0(double[] row, double[] preds) {
-        return score0(row, 0.0, preds);
     }
 
 }
