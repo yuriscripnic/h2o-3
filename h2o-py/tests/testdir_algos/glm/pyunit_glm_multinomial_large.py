@@ -81,8 +81,6 @@ class TestGLMMultinomial:
  #   max_col_count_ratio = 50   # set max row count to be multiples of col_count to avoid overfitting
  #   min_col_count_ratio = 10
 
-
-
     max_p_value = 2             # set maximum predictor value
     min_p_value = -2            # set minimum predictor value
 
