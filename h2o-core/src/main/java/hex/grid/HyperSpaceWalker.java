@@ -467,6 +467,7 @@ public interface HyperSpaceWalker<MP extends Model.Parameters, C extends HyperSp
       return ScoreKeeper.stopEarly(ScoringInfo.scoreKeepers(sk),
                                    search_criteria().stopping_rounds(),
                                    model._output.isClassifier(),
+                                   search_criteria().stopping_method(),
                                    search_criteria().stopping_metric(),
                                    search_criteria().stopping_tolerance(), "grid's best", true);
     }

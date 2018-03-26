@@ -108,13 +108,19 @@ public class ScoreKeeper extends Iced {
     _custom_metric =  m._custom_metric.value;
   }
 
-  public enum StoppingMetric { AUTO, deviance, logloss, MSE, RMSE,MAE,RMSLE, AUC, lift_top_group, misclassification, mean_per_class_error, custom, r2}
+  public enum StoppingMetric { AUTO, deviance, logloss, MSE, RMSE,MAE,RMSLE, AUC, lift_top_group, misclassification, mean_per_class_error, custom}
+  public enum StoppingMethods {AUTO, train, valid, xval} // denote dataset used to calculate early stopping metrics
+
   public static boolean moreIsBetter(StoppingMetric criterion) {
     return (criterion == StoppingMetric.AUC || criterion == StoppingMetric.lift_top_group || criterion == StoppingMetric.r2);
   }
 
   /** Based on the given array of ScoreKeeper and stopping criteria should we stop early? */
   public static boolean stopEarly(ScoreKeeper[] sk, int k, boolean classification, StoppingMetric criterion, double rel_improvement, String what, boolean verbose) {
+    return stopEarly(sk, k, classification, ScoreKeeper.StoppingMethods.AUTO, criterion, rel_improvement, what, verbose);
+  }
+  /** Based on the given array of ScoreKeeper and stopping criteria should we stop early? */
+  public static boolean stopEarly(ScoreKeeper[] sk, int k, boolean classification, ScoreKeeper.StoppingMethods stopping_method, StoppingMetric criterion, double rel_improvement, String what, boolean verbose) {
     if (k == 0) return false;
     int len = sk.length - 1; //how many "full"/"conservative" scoring events we have (skip the first)
     if (len < 2*k) return false; //need at least k for SMA and another k to tell whether the model got better or not

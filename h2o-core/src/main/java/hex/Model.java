@@ -197,7 +197,6 @@ public abstract class Model<M extends Model<M,P,O>, P extends Model.Parameters, 
       AUTO, Random, Modulo, Stratified
     }
 
-    public enum StoppingMethods {AUTO, train, valid, xval}; // denote dataset used to calculate early stopping metrics
     public enum CategoricalEncodingScheme {
       AUTO(false), OneHotInternal(false), OneHotExplicit(false), Enum(false), Binary(false), Eigen(false), LabelEncoder(false), SortByResponse(true), EnumLimited(false);
       CategoricalEncodingScheme(boolean needResponse) { _needResponse = needResponse; }

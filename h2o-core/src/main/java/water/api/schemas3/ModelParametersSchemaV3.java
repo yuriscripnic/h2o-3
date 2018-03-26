@@ -159,7 +159,7 @@ public class ModelParametersSchemaV3<P extends Model.Parameters, S extends Model
                   "  If set to train: training data frame is used to determine early stopping.  If set to valid:" +
                   " validation dataset is used to determine early stopping.  If set to xval: hold out dataset" +
                   "in each fold of cross-validation is used to calculate early stopping conditions.")
-  public Model.Parameters.StoppingMethods stopping_method;
+  public ScoreKeeper.StoppingMethods stopping_method;
 
   @API(help = "Maximum allowed runtime in seconds for model training. Use 0 to disable.", level = API.Level.secondary, direction=API.Direction.INOUT, gridable = true)
   public double max_runtime_secs;
