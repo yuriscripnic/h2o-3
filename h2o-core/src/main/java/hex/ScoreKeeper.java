@@ -108,7 +108,7 @@ public class ScoreKeeper extends Iced {
     _custom_metric =  m._custom_metric.value;
   }
 
-  public enum StoppingMetric { AUTO, deviance, logloss, MSE, RMSE,MAE,RMSLE, AUC, lift_top_group, misclassification, mean_per_class_error, custom}
+  public enum StoppingMetric { AUTO, deviance, logloss, MSE, RMSE,MAE,RMSLE, AUC, lift_top_group, misclassification, mean_per_class_error, custom, r2}
   public enum StoppingMethods {AUTO, train, valid, xval} // denote dataset used to calculate early stopping metrics
 
   public static boolean moreIsBetter(StoppingMetric criterion) {

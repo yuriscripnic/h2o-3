@@ -408,7 +408,7 @@ public class DeepLearningModel extends Model<DeepLearningModel,DeepLearningModel
           _output._training_metrics._description = "Metrics reported on full training frame";
         }
 
-        // Scoring on validation data
+        // Scoring on cross-validation data
         hex.ModelMetrics mvalid;
         if (fValid != null) {
           preds = null;
