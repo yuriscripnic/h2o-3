@@ -34,7 +34,7 @@
 #'        Otherwise, training dataset is used to determine early stopping.  If set to train: training data frame is used
 #'        to determine early stopping.  If set to valid: validation dataset is used to determine early stopping.  If set
 #'        to xval: hold out datasetin each fold of cross-validation is used to calculate early stopping conditions. Must
-#'        be one of: "AUTO", "train", "valid", "xval".
+#'        be one of: "AUTO", "train", "valid", "xval". Defaults to AUTO.
 #' @param stopping_rounds Early stopping based on convergence of stopping_metric. Stop if simple moving average of length k of the
 #'        stopping_metric does not improve for k:=stopping_rounds scoring events (0 to disable) Defaults to 0.
 #' @param stopping_metric Metric to use for early stopping (AUTO: logloss for classification, deviance for regression) Must be one of:

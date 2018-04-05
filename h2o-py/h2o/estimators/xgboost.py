@@ -256,7 +256,7 @@ class H2OXGBoostEstimator(H2OEstimator):
         to determine early stopping.  If set to valid: validation dataset is used to determine early stopping.  If set
         to xval: hold out datasetin each fold of cross-validation is used to calculate early stopping conditions.
 
-        One of: ``"auto"``, ``"train"``, ``"valid"``, ``"xval"``.
+        One of: ``"auto"``, ``"train"``, ``"valid"``, ``"xval"``  (default: ``"auto"``).
         """
         return self._parms.get("stopping_method")
 
