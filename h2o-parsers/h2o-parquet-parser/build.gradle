@@ -12,7 +12,7 @@ configurations{
 }
 
 dependencies {
-  hadoopCommonExclude(("org.apache.hadoop:hadoop-common:${parquetHadoopVersion}"))
+  hadoopCommonExclude("org.apache.hadoop:hadoop-common:${parquetHadoopVersion}")
 
   compile project(":h2o-core")
   compile(project(":h2o-persist-hdfs")) {
