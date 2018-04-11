@@ -13,8 +13,9 @@ dependencies {
   // Jama dependencies
   compile "gov.nist.math:jama:1.0.3"
   // netlib-java / MTJ dependencies
-  compile('com.googlecode.matrix-toolkits-java:mtj:1.0.4') {
-    exclude group: 'com.github.fommil.netlib', module: 'all'
+  compile('com.github.fommil.netlib:core:1.1.2')
+  compile('com.googlecode.matrix-toolkits-java:mtj:1.0.4'){
+      exclude group: 'com.github.fommil.netlib', module: 'all'
   }
 
   // Test dependencies only
