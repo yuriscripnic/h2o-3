@@ -175,6 +175,10 @@ class BuildConfig {
     return nodeLabels.getGPUNodeLabel()
   }
 
+  String getMediumTierNodeLabel() {
+    return nodeLabels.getMediumTierNodeLabel()
+  }
+
   boolean getBuildHadoop() {
     return buildHadoop
   }
@@ -304,17 +308,15 @@ class BuildConfig {
   }
 
   static enum JenkinsMaster {
-    C1, // indicates we are running under mr-0xc1 master - master or nightly build
-    B4  // indicates we are running under mr-0xb4 master - PR build
+    C1, // indicates we are running under mr-0xc1 master
+    RANCHER  // indicates we are running under Rancher master
 
     private static JenkinsMaster findByName(final String name) {
       switch(name.toLowerCase()) {
         case 'c1':
           return C1
-        case 'b4':
-          return B4
         default:
-          throw new IllegalArgumentException(String.format("Master %s is unknown", name))
+          return RANCHER
       }
     }
 
@@ -325,21 +327,34 @@ class BuildConfig {
   }
 
   static enum NodeLabels {
-    LABELS_C1('docker && !mr-0xc8', 'mr-0xc9', 'mr-dl16'),
-    LABELS_B4('docker', 'docker', 'mr-dl16')
+    LABELS_C1('docker && !mr-0xc8', 'mr-0xc9', 'mr-dl16', 'docker && !mr-0xc8', 'docker && !mr-0xc8'),
+    LABELS_RANCHER('docker', 'docker', 'gpu', 'docker && tier-small', 'docker && tier-medium')
 
     private final String defaultNodeLabel
+    private final String smallTierLabel
+    private final String mediumTierLabel
     private final String benchmarkNodeLabel
     private final String gpuNodeLabel
 
-    private NodeLabels(final String defaultNodeLabel, final String benchmarkNodeLabel, final String gpuNodeLabel) {
+    private NodeLabels(final String defaultNodeLabel, final String benchmarkNodeLabel, final String gpuNodeLabel,
+                       final String smallTierLabel, final String mediumTierLabel) {
       this.defaultNodeLabel = defaultNodeLabel
       this.benchmarkNodeLabel = benchmarkNodeLabel
       this.gpuNodeLabel = gpuNodeLabel
+      this.smallTierLabel = smallTierLabel
+      this.mediumTierLabel = mediumTierLabel
     }
 
     String getDefaultNodeLabel() {
       return defaultNodeLabel
+    }
+
+    String getSmallTierNodeLabel() {
+      return smallTierLabel
+    }
+
+    String getMediumTierNodeLabel() {
+      return mediumTierLabel
     }
 
     String getBenchmarkNodeLabel() {
@@ -350,12 +365,12 @@ class BuildConfig {
       return gpuNodeLabel
     }
 
-    private static findByJenkinsMaster(final JenkinsMaster master) {
+    private static NodeLabels findByJenkinsMaster(final JenkinsMaster master) {
       switch (master) {
         case JenkinsMaster.C1:
           return LABELS_C1
-        case JenkinsMaster.B4:
-          return LABELS_B4
+	    case JenkinsMaster.RANCHER:
+          return LABELS_RANCHER
         default:
           throw new IllegalArgumentException(String.format("Master %s is unknown", master))
       }
