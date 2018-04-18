@@ -27,7 +27,7 @@ try {
                     dir(env.BUILD_NUMBER_DIR) {
                         deleteDir()
                         retry(5) {
-                            timeout(1) {
+                            timeout(3) {
                                 scmEnv = checkout scm
                             }
                         }

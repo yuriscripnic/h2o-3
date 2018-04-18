@@ -31,7 +31,7 @@ try {
               deleteDir()
               // checkout H2O-3
               retry(3) {
-                timeout(time: 1, unit: 'MINUTES') {
+                timeout(time: 3, unit: 'MINUTES') {
                   echo "###### Checkout H2O-3 ######"
                   scmEnv = checkout scm
                 }
