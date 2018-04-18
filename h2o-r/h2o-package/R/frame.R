@@ -3782,6 +3782,67 @@ h2o.arrange <- function(x, ...) {
   .newExpr("sort", x, by-1L, as.numeric(ascend))
 }
 
+generateColInd <-function(data, by) {
+  ### handle the columns
+  # we accept: c('col1', 'col2'), 1:2, c(1,2) as column names.
+  if(base::is.character(by)) {
+    group.cols <- match(by, colnames(data))
+    if (any(is.na(group.cols)))
+    stop('No column named ', by, ' in ', substitute(data), '.')
+  } else if(is.integer(by)) {
+    group.cols <- by
+  } else if(is.numeric(by)) {   # this will happen eg c(1,2,3)
+    group.cols <- as.integer(by)
+  }
+
+  if(group.cols <= 0L || group.cols > ncol(data)) {
+   stop('Column ', group.cols, ' out of range for frame columns ', ncol(data), '.')
+  }
+
+  if (anyDuplicated(by)) stop("Some duplicate column names have been provided")
+
+  return(group.cols)
+}
+
+#' First, sorts an H2OFrame by columns in sortby and sort directions specified.
+#' Next, groupby groups are formed by the columns specified in by.
+#' A new column is added to the returned H2OFrame that contains the rank of
+#' row accoring to the sort orders established in the first sort by within the groupby groups.
+#'
+#' To sort column c1 in descending order, specify -1 for column c1 in the sort order list.  Default sort is ascending.
+#' If no column name is specified for the new column, it will be called New_Rank_column.
+#'
+#' @param x The H2OFrame input to be sorted.
+#' @param groupbyCols a list of column names or indices
+#' @param sortCols a list of column names or indices
+#' @param ascending a list of Boolean to determine if ascending sort is needed for each column in sortCols (optional).  Default is ascending sort for all.
+#' @param newColName new column name for the newly added rank column if specified (optional)
+#'
+#' @export
+h2o.rank_within_group_by <- function(x, groupbyCols, sortCols, ascending=NULL, newColName="New_Rank_column") {
+  group.cols = generateColInd(x, groupbyCols)
+  sort.cols = generateColInd(x, sortCols)
+  numSort <- length(sort.cols)
+  sortdir <- 1^(runif(numSort,1,1)) # default sort direction is ascending
+  if (length(ascending) > 0) {
+    if (length(ascending) != numSort) stop("Sizes of sorting columns and sorting directions must be the same.")
+    for (ind in c(1:numSort)) {
+      if (is.logical(ascending[ind])) {
+        if (ascending[ind]) {
+          sortdir[ind] = 1
+        } else {
+          sortdir[ind]=-1
+        }
+      } else {
+        stop("ascending must contain either TRUE for ascending sort, FALSE for descending sort for each column in sortCols.")
+      }
+    }
+  }
+
+
+
+  .newExpr("rank_within_groupby", x, group.cols-1L, sort.cols-1L, sortdir, newColName)
+}
 
 #' Reorders levels of an H2O factor, similarly to standard R's relevel.
 #'
