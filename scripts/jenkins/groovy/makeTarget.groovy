@@ -92,6 +92,7 @@ private void execMake(final String buildAction, final String h2o3dir) {
     unset CHANGE_TITLE
 
     printenv
+    id
     ${buildAction}
   """
 }
