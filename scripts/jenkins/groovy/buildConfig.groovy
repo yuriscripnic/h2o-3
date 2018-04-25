@@ -179,6 +179,10 @@ class BuildConfig {
     return nodeLabels.getMediumTierNodeLabel()
   }
 
+  String getLargeTierNodeLabel() {
+    return nodeLabels.getLargeTierNodeLabel()
+  }
+
   boolean getBuildHadoop() {
     return buildHadoop
   }
@@ -327,22 +331,24 @@ class BuildConfig {
   }
 
   static enum NodeLabels {
-    LABELS_C1('docker && !mr-0xc8', 'mr-0xc9', 'mr-dl16', 'docker && !mr-0xc8', 'docker && !mr-0xc8'),
-    LABELS_RANCHER('docker', 'docker', 'gpu', 'docker && tier-small', 'docker && tier-medium')
+    LABELS_C1('docker && !mr-0xc8', 'mr-0xc9', 'mr-dl16', 'docker && !mr-0xc8', 'docker && !mr-0xc8', 'docker && !mr-0xc8'),
+    LABELS_RANCHER('docker', 'docker', 'gpu', 'docker && tier-small', 'docker && tier-medium', 'docker && tier-large')
 
     private final String defaultNodeLabel
     private final String smallTierLabel
     private final String mediumTierLabel
+    private final String largeTierLabel
     private final String benchmarkNodeLabel
     private final String gpuNodeLabel
 
     private NodeLabels(final String defaultNodeLabel, final String benchmarkNodeLabel, final String gpuNodeLabel,
-                       final String smallTierLabel, final String mediumTierLabel) {
+                       final String smallTierLabel, final String mediumTierLabel, final String largeTierLabel) {
       this.defaultNodeLabel = defaultNodeLabel
       this.benchmarkNodeLabel = benchmarkNodeLabel
       this.gpuNodeLabel = gpuNodeLabel
       this.smallTierLabel = smallTierLabel
       this.mediumTierLabel = mediumTierLabel
+      this.largeTierLabel = largeTierLabel
     }
 
     String getDefaultNodeLabel() {
@@ -355,6 +361,10 @@ class BuildConfig {
 
     String getMediumTierNodeLabel() {
       return mediumTierLabel
+    }
+
+    String getLargeTierNodeLabel() {
+      return largeTierLabel
     }
 
     String getBenchmarkNodeLabel() {

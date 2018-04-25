@@ -310,6 +310,10 @@ def call(final pipelineContext) {
     if (modeCode >= MODE_NIGHTLY_CODE) {
       jobs += NIGHTLY_STAGES
     }
+    // FIXME do not run large stages
+    jobs = jobs.findAll {it ->
+      it.nodeLabel != pipelineContext.getBuildConfig().getLargeTierNodeLabel()
+    }
     executeInParallel(jobs, pipelineContext)
   }
 }
