@@ -13,7 +13,7 @@ configurations{
 
 dependencies {
   hadoopCommonExclude("org.apache.hadoop:hadoop-common:${defaultHadoopClientVersion}")
-  hiveExecExclude("org.apache.hive:hive-exec:1.2.2"){
+  hiveExecExclude("org.apache.hive:hive-exec:$orcDefaultHiveExecVersion"){
       // this dependency need to be excluded manually as Gradle can't find it in maven central
       exclude group: 'org.pentaho', module: 'pentaho-aggdesigner-algorithm'
   }
@@ -51,7 +51,7 @@ dependencies {
   testCompile "junit:junit:${junitVersion}"
   testCompile project(path: ":h2o-core", configuration: "testArchives")
   // We need correct version of MapRe Hadoop to run JUnits
-  testRuntime("org.apache.hadoop:hadoop-client:${orcDefaultHadoopClientVersion}") {
+  testRuntime("org.apache.hadoop:hadoop-client:$orcDefaultHadoopClientVersion") {
       exclude module: "jasper-runtime"
       exclude module: "jasper-compiler"
       exclude module: "curator-client"
