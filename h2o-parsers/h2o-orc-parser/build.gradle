@@ -40,7 +40,7 @@ dependencies {
       exclude group: 'org.pentaho', module: 'pentaho-aggdesigner-algorithm'
   }
   // For compilation we need common
-  compile("org.apache.hadoop:hadoop-common:${orcDefaultHadoopClientVersion}") {
+  compile("org.apache.hadoop:hadoop-common:$orcDefaultHadoopClientVersion") {
       // we can't use transitive=false so we need to exclude the dependencies manually
       configurations.hadoopCommonExclude.getResolvedConfiguration().getResolvedArtifacts().forEach {
           if (it.moduleVersion.id.group != "org.apache.hadoop" && it.moduleVersion.id.module.name != "hadoop-common") {
