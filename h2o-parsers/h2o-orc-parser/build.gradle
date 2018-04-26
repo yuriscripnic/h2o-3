@@ -27,9 +27,9 @@ dependencies {
   }
 
   // Note: What is connection between hive-exec version and hadoop-version and orc version?
-  // Note: In this case we are using hive version which is compatible with $defaultHadoopClientVersion
+  // Note: In this case we are using hive version which is compatible with $orcDefaultHadoopClientVersion
   // Note: for newest version it should be replaces by hive-orc
-  compile("org.apache.hive:hive-exec:1.2.2") {
+  compile("org.apache.hive:hive-exec:$orcDefaultHiveExecVersion") {
       // we can't use transitive=false so we need to exclude the dependencies manually
       configurations.hiveExecExclude.getResolvedConfiguration().getResolvedArtifacts().forEach {
           if (it.moduleVersion.id.group != "org.apache.hive" && it.moduleVersion.id.module.name != "hive-exec") {
@@ -39,7 +39,7 @@ dependencies {
       exclude group: 'org.pentaho', module: 'pentaho-aggdesigner-algorithm'
   }
   // For compilation we need common
-  compile("org.apache.hadoop:hadoop-common:${defaultHadoopClientVersion}") {
+  compile("org.apache.hadoop:hadoop-common:${orcDefaultHadoopClientVersion}") {
       // we can't use transitive=false so we need to exclude the dependencies manually
       configurations.hadoopCommonExclude.getResolvedConfiguration().getResolvedArtifacts().forEach {
           if (it.moduleVersion.id.group != "org.apache.hadoop" && it.moduleVersion.id.module.name != "hadoop-common") {
@@ -51,7 +51,7 @@ dependencies {
   testCompile "junit:junit:${junitVersion}"
   testCompile project(path: ":h2o-core", configuration: "testArchives")
   // We need correct version of MapRe Hadoop to run JUnits
-  testRuntime("org.apache.hadoop:hadoop-client:${defaultHadoopClientVersion}") {
+  testRuntime("org.apache.hadoop:hadoop-client:${orcDefaultHadoopClientVersion}") {
       exclude module: "jasper-runtime"
       exclude module: "jasper-compiler"
       exclude module: "curator-client"

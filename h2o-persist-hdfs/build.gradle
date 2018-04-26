@@ -9,11 +9,13 @@ configurations {
 dependencies {
     compile project(":h2o-core")
     compile('net.java.dev.jets3t:jets3t:0.9.0')
-    compile("org.apache.hadoop:hadoop-client:${defaultHadoopClientVersion}") {
+    def hadoopVersion = project.hasProperty("doIncludeOrc") && project.doIncludeOrc == "true" ?
+            orcDefaultHadoopClientVersion : defaultHadoopClientVersion
+    compile("org.apache.hadoop:hadoop-client:${hadoopVersion}") {
         // Pull all dependencies to allow run directly from IDE or command line
         transitive = true
     }
-    compile("org.apache.hadoop:hadoop-aws:${defaultHadoopClientVersion}")
+    compile("org.apache.hadoop:hadoop-aws:${hadoopVersion}")
     testCompile "junit:junit:${junitVersion}"
     testCompile project(path: ":h2o-core", configuration: "testArchives")
 }
