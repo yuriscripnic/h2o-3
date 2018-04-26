@@ -16,6 +16,7 @@ dependencies {
   hiveExecExclude("org.apache.hive:hive-exec:$orcDefaultHiveExecVersion"){
       // this dependency need to be excluded manually as Gradle can't find it in maven central
       exclude group: 'org.pentaho', module: 'pentaho-aggdesigner-algorithm'
+      exclude group: 'eigenbase', module: 'eigenbase-properties'
   }
   compile project(":h2o-core")
   // Only PersistHDFS API
