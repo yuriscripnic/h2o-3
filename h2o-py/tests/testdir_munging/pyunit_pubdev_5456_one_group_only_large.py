@@ -10,7 +10,7 @@ def test_rankWithGroupBy():
     train,groupCols,sortCols = generate_trainingFrame()
     answerFrame, finalDir, finalSorts, sortCols, sortDirs, newColName = generate_answerFrame(train, groupCols, sortCols) # the rank_within_group result should return this
     rankedFrame = train.rank_within_group_by(groupCols, sortCols, sortDirs) if randint(1,10)>5 \
-        else train.rank_within_group_by(groupCols, sortCols, newColName=newColName)
+         else train.rank_within_group_by(groupCols, sortCols, newColName=newColName)
     rankedFrame.summary()
     finalFrame = rankedFrame.sort(finalSorts, finalDir)
     finalFrame.summary()
@@ -40,9 +40,6 @@ def generate_answerFrame(originalFrame, groupByCols, sortCols):
     :return:
     """
     sortDirs = [True]*len(sortCols)
-    for ind in range(len(sortCols)):
-        sortDirs[ind] = bool(random.getrandbits(1)) # randomize sort direction
-
     finalDir = [True]*len(groupByCols)
     finalDir.extend(sortDirs)
     finalSorts = []
