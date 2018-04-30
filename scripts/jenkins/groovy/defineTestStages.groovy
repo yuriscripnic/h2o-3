@@ -37,8 +37,7 @@ def call(final pipelineContext) {
     ],
     [
       stageName: 'Java8 Smoke', target: 'test-junit-smoke',timeoutValue: 20,
-      component: pipelineContext.getBuildConfig().COMPONENT_JAVA,
-      nodeLabel: pipelineContext.getBuildConfig().getMediumTierNodeLabel()
+      component: pipelineContext.getBuildConfig().COMPONENT_JAVA, tier: pipelineContext.POD_TIER_MEDIUM
     ]
   ]
 
@@ -50,8 +49,7 @@ def call(final pipelineContext) {
     ],
     [
       stageName: 'Py2.7 Demos', target: 'test-py-demos', pythonVersion: '2.7',
-      timeoutValue: 30, component: pipelineContext.getBuildConfig().COMPONENT_PY,
-      nodeLabel: pipelineContext.getBuildConfig().getMediumTierNodeLabel()
+      timeoutValue: 30, component: pipelineContext.getBuildConfig().COMPONENT_PY, tier: pipelineContext.POD_TIER_MEDIUM
     ],
     [
       stageName: 'Py2.7 Init', target: 'test-py-init', pythonVersion: '2.7',
@@ -91,8 +89,7 @@ def call(final pipelineContext) {
     ],
     [
       stageName: 'R3.4 Booklets', target: 'test-r-booklets', rVersion: '3.4.1',
-      timeoutValue: 50, component: pipelineContext.getBuildConfig().COMPONENT_R,
-      nodeLabel: pipelineContext.getBuildConfig().getMediumTierNodeLabel()
+      timeoutValue: 50, component: pipelineContext.getBuildConfig().COMPONENT_R, tier: pipelineContext.POD_TIER_MEDIUM
     ],
     [
       stageName: 'R3.4 Demos Small', target: 'test-r-demos-small', rVersion: '3.4.1',
@@ -104,16 +101,15 @@ def call(final pipelineContext) {
     ],
     [
       stageName: 'Py3.6 Medium-large', target: 'test-pyunit-medium-large', pythonVersion: '3.5',
-      timeoutValue: 120, component: pipelineContext.getBuildConfig().COMPONENT_PY
+      timeoutValue: 120, component: pipelineContext.getBuildConfig().COMPONENT_PY, tier: pipelineContext.POD_TIER_LARGE
     ],
     [
       stageName: 'R3.4 Medium-large', target: 'test-r-medium-large', rVersion: '3.4.1',
-      timeoutValue: 80, component: pipelineContext.getBuildConfig().COMPONENT_R
+      timeoutValue: 80, component: pipelineContext.getBuildConfig().COMPONENT_R, tier: pipelineContext.POD_TIER_LARGE
     ],
     [
       stageName: 'R3.4 Demos Medium-large', target: 'test-r-demos-medium-large', rVersion: '3.4.1',
-      timeoutValue: 140, component: pipelineContext.getBuildConfig().COMPONENT_R,
-      nodeLabel: pipelineContext.getBuildConfig().getMediumTierNodeLabel()
+      timeoutValue: 140, component: pipelineContext.getBuildConfig().COMPONENT_R, tier: pipelineContext.POD_TIER_MEDIUM
     ],
     [
       stageName: 'INFO Check', target: 'test-info',
@@ -126,8 +122,7 @@ def call(final pipelineContext) {
     [
       stageName: 'Java 8 JUnit', target: 'test-junit-jenkins', pythonVersion: '2.7',
       timeoutValue: 90, component: pipelineContext.getBuildConfig().COMPONENT_JAVA,
-      additionalTestPackages: [pipelineContext.getBuildConfig().COMPONENT_PY],
-      nodeLabel: pipelineContext.getBuildConfig().getMediumTierNodeLabel()
+      additionalTestPackages: [pipelineContext.getBuildConfig().COMPONENT_PY], tier: pipelineContext.POD_TIER_MEDIUM
     ],
     [
       stageName: 'R3.4 Generate Docs', target: 'r-generate-docs-jenkins', archiveFiles: false,
@@ -142,21 +137,18 @@ def call(final pipelineContext) {
       timeoutValue: 120, target: 'benchmark', component: pipelineContext.getBuildConfig().COMPONENT_ANY,
       additionalTestPackages: [pipelineContext.getBuildConfig().COMPONENT_R], image: pipelineContext.getBuildConfig().BENCHMARK_IMAGE,
       customData: [algorithm: 'gbm'], makefilePath: pipelineContext.getBuildConfig().BENCHMARK_MAKEFILE_PATH,
-      nodeLabel: pipelineContext.getBuildConfig().getBenchmarkNodeLabel()
     ],
     [
       stageName: 'H2O XGB Benchmark', executionScript: 'h2o-3/scripts/jenkins/groovy/benchmarkStage.groovy',
       timeoutValue: 120, target: 'benchmark', component: pipelineContext.getBuildConfig().COMPONENT_ANY,
       additionalTestPackages: [pipelineContext.getBuildConfig().COMPONENT_R], image: pipelineContext.getBuildConfig().BENCHMARK_IMAGE,
       customData: [algorithm: 'xgb'], makefilePath: pipelineContext.getBuildConfig().BENCHMARK_MAKEFILE_PATH,
-      nodeLabel: pipelineContext.getBuildConfig().getBenchmarkNodeLabel(),
     ],
     [
       stageName: 'Vanilla XGB Benchmark', executionScript: 'h2o-3/scripts/jenkins/groovy/benchmarkStage.groovy',
       timeoutValue: 120, target: 'benchmark-xgb-vanilla', component: pipelineContext.getBuildConfig().COMPONENT_ANY,
       additionalTestPackages: [pipelineContext.getBuildConfig().COMPONENT_PY], image: pipelineContext.getBuildConfig().BENCHMARK_IMAGE,
       customData: [algorithm: 'xgb-vanilla'], makefilePath: pipelineContext.getBuildConfig().BENCHMARK_MAKEFILE_PATH,
-      nodeLabel: pipelineContext.getBuildConfig().getBenchmarkNodeLabel(),
     ]
   ]
 
@@ -164,16 +156,15 @@ def call(final pipelineContext) {
   def MASTER_STAGES = [
     [
       stageName: 'Py2.7 Medium-large', target: 'test-pyunit-medium-large', pythonVersion: '2.7',
-      timeoutValue: 120, component: pipelineContext.getBuildConfig().COMPONENT_PY
+      timeoutValue: 120, component: pipelineContext.getBuildConfig().COMPONENT_PY, tier: pipelineContext.POD_TIER_LARGE
     ],
     [
       stageName: 'Py3.5 Medium-large', target: 'test-pyunit-medium-large', pythonVersion: '3.5',
-      timeoutValue: 120, component: pipelineContext.getBuildConfig().COMPONENT_PY
+      timeoutValue: 120, component: pipelineContext.getBuildConfig().COMPONENT_PY, tier: pipelineContext.POD_TIER_LARGE
     ],
     [
       stageName: 'R3.4 Datatable', target: 'test-r-datatable', rVersion: '3.4.1',
-      timeoutValue: 40, component: pipelineContext.getBuildConfig().COMPONENT_R,
-      nodeLabel: pipelineContext.getBuildConfig().getMediumTierNodeLabel()
+      timeoutValue: 40, component: pipelineContext.getBuildConfig().COMPONENT_R, tier: pipelineContext.POD_TIER_MEDIUM
     ],
     [
       stageName: 'PhantomJS Small', target: 'test-phantom-js-small',
@@ -181,7 +172,7 @@ def call(final pipelineContext) {
     ],
     [
       stageName: 'PhantomJS Medium', target: 'test-phantom-js-medium',
-      timeoutValue: 75, component: pipelineContext.getBuildConfig().COMPONENT_JS
+      timeoutValue: 75, component: pipelineContext.getBuildConfig().COMPONENT_JS, tier: pipelineContext.POD_TIER_LARGE
     ]
   ]
   MASTER_STAGES += BENCHMARK_STAGES
@@ -190,7 +181,7 @@ def call(final pipelineContext) {
   def NIGHTLY_STAGES = [
     [
       stageName: 'R3.3 Medium-large', target: 'test-r-medium-large', rVersion: '3.3.3',
-      timeoutValue: 70, component: pipelineContext.getBuildConfig().COMPONENT_R
+      timeoutValue: 70, component: pipelineContext.getBuildConfig().COMPONENT_R, tier: pipelineContext.POD_TIER_LARGE
     ],
     [
       stageName: 'R3.3 Small', target: 'test-r-small', rVersion: '3.3.3',
@@ -234,7 +225,6 @@ def call(final pipelineContext) {
         timeoutValue: 15, component: pipelineContext.getBuildConfig().COMPONENT_ANY,
         additionalTestPackages: [pipelineContext.getBuildConfig().COMPONENT_JAVA], pythonVersion: '3.5',
         image: pipelineContext.getBuildConfig().getXGBImageForEnvironment(osName, xgbEnv),
-        nodeLabel: pipelineContext.getBuildConfig().getXGBNodeLabelForEnvironment(xgbEnv)
       ]
       if (xgbEnv.targetName == pipelineContext.getBuildConfig().XGB_TARGET_GPU) {
         stageDefinition['executionScript'] = 'h2o-3/scripts/jenkins/groovy/xgbGPUStage.groovy'
@@ -248,7 +238,7 @@ def call(final pipelineContext) {
       stageName: 'h2o-algos Coverage', target: 'coverage-junit-algos', pythonVersion: '2.7', timeoutValue: 5 * 60,
       executionScript: 'h2o-3/scripts/jenkins/groovy/coverageStage.groovy',
       component: pipelineContext.getBuildConfig().COMPONENT_JAVA, archiveAdditionalFiles: ['build/reports/jacoco/*.exec'],
-      additionalTestPackages: [pipelineContext.getBuildConfig().COMPONENT_PY], nodeLabel: "${pipelineContext.getBuildConfig().getDefaultNodeLabel()} && !micro"
+      additionalTestPackages: [pipelineContext.getBuildConfig().COMPONENT_PY]
     ]
   ]
 
@@ -310,10 +300,6 @@ def call(final pipelineContext) {
     if (modeCode >= MODE_NIGHTLY_CODE) {
       jobs += NIGHTLY_STAGES
     }
-    // FIXME do not run large stages
-    jobs = jobs.findAll {it ->
-      it.nodeLabel != pipelineContext.getBuildConfig().getLargeTierNodeLabel()
-    }
     executeInParallel(jobs, pipelineContext)
   }
 }
@@ -331,7 +317,7 @@ private void executeInParallel(final jobs, final pipelineContext) {
           hasJUnit = c['hasJUnit']
           component = c['component']
           additionalTestPackages = c['additionalTestPackages']
-          nodeLabel = c['nodeLabel']
+          tier = c['tier']
           executionScript = c['executionScript']
           image = c['image']
           customData = c['customData']
@@ -370,7 +356,7 @@ private void invokeStage(final pipelineContext, final body) {
     config.hasJUnit = true
   }
   config.additionalTestPackages = config.additionalTestPackages ?: []
-  config.nodeLabel = config.nodeLabel ?: pipelineContext.getBuildConfig().getDefaultNodeLabel()
+  config.tier = config.tier ?: pipelineContext.POD_TIER_SMALL
   config.executionScript = config.executionScript ?: DEFAULT_EXECUTION_SCRIPT
   config.image = config.image ?: pipelineContext.getBuildConfig().DEFAULT_IMAGE
   config.makefilePath = config.makefilePath ?: pipelineContext.getBuildConfig().MAKEFILE_PATH
@@ -389,32 +375,18 @@ private void invokeStage(final pipelineContext, final body) {
         pipelineContext.getBuildSummary().markStageSuccessful(this, config.stageName)
       } else {
         withCustomCommitStates(scm, 'h2o-ops-personal-auth-token', "${pipelineContext.getBuildConfig().getGitHubCommitStateContext(config.stageName)}") {
-          boolean healthCheckPassed = false
-          int attempt = 0
-          String nodeLabel = config.nodeLabel
           try {
-            while (!healthCheckPassed) {
-              attempt += 1
-              if (attempt > HEALTH_CHECK_RETRIES) {
-                error "Too many attempts to pass initial health check"
-              }
-              nodeLabel = pipelineContext.getHealthChecker().getHealthyNodesLabel(config.nodeLabel)
-              echo "######### NodeLabel: ${nodeLabel} #########"
-              node(nodeLabel) {
-                echo "###### Unstash scripts. ######"
-                pipelineContext.getUtils().unstashScripts(this)
+            pipelineContext.insidePod(this, config.tier) {
+              echo "###### Unstash scripts. ######"
+              pipelineContext.getUtils().unstashScripts(this)
 
-                healthCheckPassed = pipelineContext.getHealthChecker().checkHealth(this, env.NODE_NAME, config.image, pipelineContext.getBuildConfig().DOCKER_REGISTRY, pipelineContext.getBuildConfig())
-                if (healthCheckPassed) {
-                  pipelineContext.getBuildSummary().setStageDetails(this, config.stageName, env.NODE_NAME, env.WORKSPACE)
+              pipelineContext.getBuildSummary().setStageDetails(this, config.stageName, env.NODE_NAME, env.WORKSPACE)
 
-                  sh "rm -rf ${config.stageDir}"
+              sh "rm -rf ${config.stageDir}"
 
-                  def script = load(config.executionScript)
-                  script(pipelineContext, config)
-                  pipelineContext.getBuildSummary().markStageSuccessful(this, config.stageName)
-                }
-              }
+              def script = load(config.executionScript)
+              script(pipelineContext, config)
+              pipelineContext.getBuildSummary().markStageSuccessful(this, config.stageName)
             }
           } catch (Exception e) {
             pipelineContext.getBuildSummary().markStageFailed(this, config.stageName)

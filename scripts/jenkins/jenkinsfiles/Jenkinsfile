@@ -2,13 +2,54 @@
 
 final String MODE_PR = 'MODE_PR'
 final String MODE_MASTER = 'MODE_MASTER'
-final String DEFAULT_NODE_LABEL = 'docker && !mr-0xc8'
-final int HEALTH_CHECK_RETRIES = 5
+final String DEFAULT_POD_CONTAINER = 'h2o-3-container'
 
 def defineTestStages = null
 def pipelineContext = null
 String result = 'FAILURE'
 def scmEnv = null
+
+final String buildPodYaml = """
+apiVersion: v1
+kind: Pod
+metadata:
+  name: h2o-3-small
+spec:
+  securityContext:
+    runAsUser: 2117
+    fsGroup: 2117
+  containers:
+  - args:
+    - cat
+    command:
+    - /bin/sh
+    - -c
+    image: docker.h2o.ai/opsh2oai/h2o-3-runtime:108
+    imagePullPolicy: Always
+    name: h2o-3-container
+    resources:
+      limits:
+        cpu: "8"
+        memory: 20Gi
+      requests:
+        cpu: "8"
+        memory: 20Gi
+    securityContext:
+      privileged: false
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    tty: true
+    volumeMounts:
+    - mountPath: /home/0xdiag
+      name: volume-0
+  imagePullSecrets:
+  - name: regcred
+  volumes:
+  - hostPath:
+      path: /home/0xdiag
+      type: ""
+    name: volume-0
+"""
 
 final boolean prJob = env.CHANGE_BRANCH != null && env.CHANGE_BRANCH != ''
 def mode = null
@@ -26,41 +67,31 @@ try {
         mode = MODE_MASTER
       }
 
-      boolean healthCheckPassed = false
-      int attempt = 0
       stage('Checkout and Build') {
-        while (!healthCheckPassed) {
-          attempt += 1
-          if (attempt > HEALTH_CHECK_RETRIES) {
-            error "Too many attempts to pass initial health check"
-          }
-          String nodeLabel = DEFAULT_NODE_LABEL
-          if (pipelineContext != null) {
-            nodeLabel = pipelineContext.getHealthChecker().getHealthyNodesLabel(DEFAULT_NODE_LABEL)
-          }
-          echo "######### NodeLabel: ${nodeLabel} #########"
-          node(nodeLabel) {
-            dir('h2o-3') {
-              // clear the folder
-              deleteDir()
-              // checkout H2O-3
-              retry(3) {
-                timeout(time: 3, unit: 'MINUTES') {
-                  echo "###### Checkout H2O-3 ######"
-                  scmEnv = checkout scm
+        final def label = "h2o-3-pod-build-${UUID.randomUUID().toString()}"
+        echo "######### NodeLabel: ${label} #########"
+        podTemplate(label: label, name: 'h2o-3-pod-build', yaml: buildPodYaml) {
+          node(label) {
+            container(DEFAULT_POD_CONTAINER) {
+              dir('h2o-3') {
+                // clear the folder
+                deleteDir()
+                // checkout H2O-3
+                retry(3) {
+                  timeout(time: 1, unit: 'MINUTES') {
+                    echo "###### Checkout H2O-3 ######"
+                    scmEnv = checkout scm
+                  }
                 }
               }
-            }
 
-            if (pipelineContext == null) {
-              def initPipelineContext = load('h2o-3/scripts/jenkins/groovy/initPipelineContext.groovy')
-              pipelineContext = initPipelineContext(scmEnv, mode, !prJob)
-              pipelineContext.getBuildConfig().setJobProperties(this)
-              // Load the defineTestStages script
-              defineTestStages = load('h2o-3/scripts/jenkins/groovy/defineTestStages.groovy')
-            }
-            healthCheckPassed = pipelineContext.getHealthChecker().checkHealth(this, env.NODE_NAME, pipelineContext.getBuildConfig().DEFAULT_IMAGE, pipelineContext.getBuildConfig().DOCKER_REGISTRY, pipelineContext.getBuildConfig())
-            if (healthCheckPassed) {
+              if (pipelineContext == null) {
+                def initPipelineContext = load('h2o-3/scripts/jenkins/groovy/initPipelineContext.groovy')
+                pipelineContext = initPipelineContext(scmEnv, mode, !prJob)
+                pipelineContext.getBuildConfig().setJobProperties(this)
+                // Load the defineTestStages script
+                defineTestStages = load('h2o-3/scripts/jenkins/groovy/defineTestStages.groovy')
+              }
               // Load build script and execute it
               def buildH2O3 = load('h2o-3/scripts/jenkins/groovy/buildH2O3.groovy')
               buildH2O3(pipelineContext)
