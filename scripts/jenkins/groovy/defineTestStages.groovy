@@ -368,7 +368,7 @@ private void invokeStage(final pipelineContext, final body) {
 
   if (pipelineContext.getBuildConfig().componentChanged(config.component)) {
     pipelineContext.getBuildSummary().addStageSummary(this, config.stageName, config.stageDir)
-    stage(config.stageName) {
+    pipelineContext.insidePod(this, config.tier) {
       if (params.executeFailedOnly && pipelineContext.getUtils().wasStageSuccessful(this, config.stageName)) {
         echo "###### Stage was successful in previous build ######"
         pipelineContext.getBuildSummary().setStageDetails(this, config.stageName, 'Skipped', 'N/A')
@@ -376,7 +376,7 @@ private void invokeStage(final pipelineContext, final body) {
       } else {
         withCustomCommitStates(scm, 'h2o-ops-personal-auth-token', "${pipelineContext.getBuildConfig().getGitHubCommitStateContext(config.stageName)}") {
           try {
-            pipelineContext.insidePod(this, config.tier) {
+            stage(config.stageName) {
               echo "###### Unstash scripts. ######"
               pipelineContext.getUtils().unstashScripts(this)
 
