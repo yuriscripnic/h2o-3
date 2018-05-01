@@ -15,13 +15,13 @@ spec:
     image: docker.h2o.ai/opsh2oai/h2o-3-runtime:108
     imagePullPolicy: Always
     name: h2o-3-container
-    resources:
-      limits:
-        cpu: "4.5"
-        memory: 29Gi
-      requests:
-        cpu: "4.5"
-        memory: 29Gi
+#    resources:
+#      limits:
+#        cpu: "4.5"
+#        memory: 29Gi
+#      requests:
+#        cpu: "4.5"
+#        memory: 29Gi
     securityContext:
       privileged: false
     terminationMessagePath: /dev/termination-log
@@ -36,4 +36,4 @@ spec:
   - hostPath:
       path: /home/0xdiag
       type: ""
-    name: volume-0
+    name: datasets

@@ -27,13 +27,13 @@ spec:
     image: docker.h2o.ai/opsh2oai/h2o-3-runtime:108
     imagePullPolicy: Always
     name: h2o-3-container
-    resources:
-      limits:
-        cpu: "8"
-        memory: 30Gi
-      requests:
-        cpu: "8"
-        memory: 30Gi
+    # resources:
+    #   limits:
+    #     cpu: "8"
+    #     memory: 30Gi
+    #   requests:
+    #     cpu: "8"
+    #     memory: 30Gi
     securityContext:
       privileged: false
     terminationMessagePath: /dev/termination-log
@@ -48,7 +48,7 @@ spec:
   - hostPath:
       path: /home/0xdiag
       type: ""
-    name: volume-0
+    name: datasets
 """
 
 final boolean prJob = env.CHANGE_BRANCH != null && env.CHANGE_BRANCH != ''
