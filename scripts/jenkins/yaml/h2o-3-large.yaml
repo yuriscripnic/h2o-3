@@ -17,11 +17,11 @@ spec:
     name: h2o-3-container
     resources:
       limits:
-        cpu: "18"
-        memory: 100Gi
+        cpu: "19.5"
+        memory: 120Gi
       requests:
-        cpu: "18"
-        memory: 100Gi
+        cpu: "19.5"
+        memory: 120Gi
     securityContext:
       privileged: false
     terminationMessagePath: /dev/termination-log

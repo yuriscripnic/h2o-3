@@ -30,10 +30,10 @@ spec:
     resources:
       limits:
         cpu: "8"
-        memory: 20Gi
+        memory: 30Gi
       requests:
         cpu: "8"
-        memory: 20Gi
+        memory: 30Gi
     securityContext:
       privileged: false
     terminationMessagePath: /dev/termination-log
